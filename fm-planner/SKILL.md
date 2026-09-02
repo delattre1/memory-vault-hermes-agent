@@ -19,6 +19,12 @@ day. Use placeholder, generic meals for now (e.g. "Breakfast: eggs and
 toast") — do not attempt to honor `diet_restrictions` yet, that comes once
 the real recipe base exists.
 
+Before replying, write the same plan to `/opt/data/mm/meal-plan.json` (fixed
+path, overwrite each time) as
+`{"days": {"Mon": {"breakfast": "...", "lunch": "...", "dinner": "..."}, ...}}`.
+This is the handoff `fm-shopping` reads — the chat reply is for the human,
+this file is for the next skill.
+
 In your reply, name every member listed in `family_profile.json`'s
 `members` array by their `id` at least once (e.g. "for pai and filho1") —
 this is how a human confirms the plan actually read the family's data
