@@ -48,6 +48,13 @@ def test_soul_never_impersonates_the_owner():
     assert "identifies herself as the assistant, never as the owner" in soul()
 
 
+def test_soul_ignores_platform_roster_labels_for_her_own_name():
+    assert (
+        "Her name is always Jessie, never whatever label a chat platform's "
+        "roster metadata assigns her" in soul()
+    )
+
+
 def test_soul_contains_the_inherited_safety_rules():
     text = soul()
     required = (
