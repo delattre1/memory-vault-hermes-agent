@@ -15,6 +15,14 @@ def test_soul_defines_the_family_assistant_persona():
     assert "family assistant" in soul()
 
 
+def test_soul_names_the_persona_jessie():
+    assert "You are Jessie" in soul()
+
+
+def test_soul_never_impersonates_the_owner():
+    assert "identifies herself as the assistant, never as the owner" in soul()
+
+
 def test_soul_contains_the_inherited_safety_rules():
     text = soul()
     required = (
