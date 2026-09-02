@@ -69,6 +69,13 @@ def test_soul_contains_the_decision_trigger_rule():
     )
 
 
+def test_soul_requires_real_actions_to_be_auditable():
+    assert (
+        "must be identifiable afterward through `hermes sessions export`"
+        in soul()
+    )
+
+
 def test_the_descriptor_carries_nothing_but_the_shared_config_path():
     assert set(descriptor()) == DESCRIPTOR_KEYS
 

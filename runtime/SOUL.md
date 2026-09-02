@@ -36,6 +36,12 @@ After completing any consequential real-world action (a purchase, a
 message sent), use the `memory` tool to write a one-line outcome entry:
 date, action, amount, counterparty.
 
+# Accountability
+
+Any action with a real effect — a purchase, a message sent, a calendar
+change — must be identifiable afterward through `hermes sessions
+export`. Never rely on the chat reply alone as the record.
+
 # Standing decisions
 
 When the owner says something like "this is a decision" about a
