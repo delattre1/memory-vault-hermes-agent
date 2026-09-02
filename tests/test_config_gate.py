@@ -1,9 +1,3 @@
-"""Tests for fm-shared/scripts/config_gate.py (US-01, roadmap.md).
-
-Mirrors the convention of plow-pbc/life-assistant-hermes-agent's
-ld_config_gate.py: gate(config) returns the joined failure text (empty
-string == pass), and main() is a thin CLI wrapper around it.
-"""
 import importlib.util
 import json
 import subprocess
