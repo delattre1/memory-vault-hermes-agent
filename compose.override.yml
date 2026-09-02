@@ -1,0 +1,10 @@
+# Per US-01/roadmap.md section 2: every skill folder mounts read-only into
+# /opt/data/skills/<name>, sourced from ${AGENT_DIR} (set by agent-mgr from
+# the registry entry, never a relative path). family_profile.json is the
+# one non-skill bind: the operator's real family data, kept outside git
+# (see .gitignore) and mounted read-only so no skill script can alter it.
+services:
+  hermes:
+    volumes:
+      - ${AGENT_DIR:?set by agent-mgr from the registry}/fm-shared:/opt/data/skills/fm-shared:ro
+      - ${AGENT_DIR:?set by agent-mgr from the registry}/family_profile.json:/opt/data/mm/family_profile.json:ro
