@@ -10,5 +10,6 @@ services:
       - ${AGENT_DIR:?set by agent-mgr from the registry}/fm-shared:/opt/data/skills/fm-shared:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/fm-planner:/opt/data/skills/fm-planner:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/fm-shopping:/opt/data/skills/fm-shopping:ro
+      - ${AGENT_DIR:?set by agent-mgr from the registry}/fm-homework:/opt/data/skills/fm-homework:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/runtime/SOUL.md:/opt/data/SOUL.md:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/family_profile.json:/opt/data/mm/family_profile.json:ro
