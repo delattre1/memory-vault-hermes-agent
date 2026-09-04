@@ -1,6 +1,6 @@
 ---
 name: executar_acao_real
-description: Use when a fact `consultar_memoria` cited carries an `acao:*` tag other than `acao:nenhuma` (reserva, compra, calendario) and the owner wants to actually move on it, not just hear about it.
+description: Use whenever the owner wants to actually move forward on something saved — a reservation, a purchase, adding to the calendar — whether that follows a `consultar_memoria` answer in the same turn or the owner asks directly ("avança a reserva que salvei", "compra isso"). The trigger is the owner's intent to act, not a specific prior tool call.
 ---
 
 # Executar ação real
@@ -21,7 +21,15 @@ correctly.
 ## Filter
 
 Map the tag to the narrowest Latch capability for *this one step*,
-never a batch of steps in one call:
+never a batch of steps in one call. **Always the `mcp__latch` tools
+(`plow_browser_open`/`plow_browser`/`plow_write_file`/`plow_run_command`)
+— never a generic/local tool that happens to also open a browser or
+fetch a page** (`browser_exec`, `web_search`, `web_extract`, `terminal`
++ `curl`, and so on). Those aren't Latch: they don't run on the
+owner's Mac, don't go through Latch's approval gate, and one of them
+(`browser_exec`) needs a local Chrome this container doesn't have — if
+`plow_browser_open` itself fails, that's Latch reporting a real error
+you relay to the owner, not a cue to switch tools.
 
 - `acao:reserva` → `plow_browser_open`/`plow_browser` to find and
   submit the reservation on the relevant site.
