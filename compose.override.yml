@@ -10,4 +10,5 @@ services:
     volumes:
       - ${AGENT_DIR:?set by agent-mgr from the registry}/ingerir_conteudo:/opt/data/skills/ingerir_conteudo:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/consultar_memoria:/opt/data/skills/consultar_memoria:ro
+      - ${AGENT_DIR:?set by agent-mgr from the registry}/executar_acao_real:/opt/data/skills/executar_acao_real:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/runtime/SOUL.md:/opt/data/SOUL.md:ro
