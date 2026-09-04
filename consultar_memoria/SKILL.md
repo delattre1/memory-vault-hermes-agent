@@ -52,3 +52,11 @@ just describing the action.
 After answering, call `fact_feedback(action="helpful", fact_id=...)`
 on every fact you actually cited — that's what trains `fact_store` for
 next time. Don't rate facts you looked at but didn't use.
+
+## When there's nothing relevant
+
+If every result comes back empty or unrelated (after dropping
+untagged ones above), say plainly that there's nothing saved about
+that yet — don't stretch an unrelated fact into an answer, and don't
+invent one. "Você não salvou nada sobre isso ainda" is a complete,
+correct answer.

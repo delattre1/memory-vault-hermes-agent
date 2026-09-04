@@ -79,3 +79,14 @@ fact_store(
 After the call, confirm to the owner in one line what you understood
 and saved (e.g. "salvei: Santorini, praia, grécia, restaurante") — this
 is what lets them correct you immediately if the extraction is wrong.
+
+## When it doesn't go cleanly
+
+- **Image with nothing recognizable** (blurry, cropped to nothing,
+  not actually a post) — say so and ask for a clearer screenshot or a
+  short description instead. Never invent a summary/tags/entities to
+  fill the gap; a fabricated fact is worse than no fact.
+- **Link that fails to load** (via Latch — dead link, blocked,
+  timeout) — say so plainly and stop; don't retry silently or fall
+  back to a different fetch method (same rule as the tool choice
+  above).
