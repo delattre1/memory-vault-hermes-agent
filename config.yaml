@@ -10,6 +10,12 @@ group_sessions_per_user: false
 model:
   default: z-ai/glm-5.3-flash
   provider: openrouter
+# Saved-content memory backend: the built-in holographic fact store (SQLite,
+# local, no API key -- confirmed reading the plugin source inside the image).
+# Not a service we run; the plugin ships with Hermes and activates on this
+# key alone. See docs/superpowers/specs/2026-09-03-jessie-content-memory-pivot-design.md, §6.
+memory:
+  provider: holographic
 mcp_servers:
   # Plow Latch, reached over the Plow relay: the browser and filesystem this
   # agent works on are the operator's Mac, not this container. The relay
@@ -38,6 +44,10 @@ plugins:
       # a future plugin change from silently shadowing an image tool of the
       # same name, which would be invisible from this file.
       allow_tool_override: false
+  # Saved-content memory backend config (the provider itself is activated by
+  # memory.provider above; this only sets its one non-default knob).
+  hermes-memory-store:
+    db_path: ${HERMES_HOME}/memory_store.db
 platforms:
   plow_chat:
     enabled: true

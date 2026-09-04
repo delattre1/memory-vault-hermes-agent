@@ -1,14 +1,22 @@
 # jessie-hermes-assistant
 
-Jessie is a family assistant for parents with kids: weekly meal plans,
-the shopping list, school material, the kids' routine — one Hermes
-agent, reached over Plow Chat, acting on the owner's own Mac through
-Plow Latch.
+Jessie is a second memory for saved content: send her a screenshot or
+a link — a trip, a recipe, a product, a gift idea — and she keeps it
+without asking you to categorize anything. Later, ask her something
+that only makes sense cross-referencing what you saved (an itinerary
+from your saved places, a recipe from what's in the pantry, gift
+ideas), and — when it makes sense — she acts for real through Plow
+Latch. One Hermes agent, reached over Plow Chat.
+
+Full architecture: `docs/superpowers/specs/2026-09-03-jessie-content-memory-pivot-design.md`.
+Day-by-day build plan: `docs/roadmap.md`.
 
 ## What it can and cannot reach
 
-- Reads `family_profile.json` (family members, dietary restrictions,
-  calendar sources) — mounted read-only, never written by a skill.
+- Saved content lives in Hermes' own built-in memory (the
+  `holographic` fact store) — no database of our own. The owner's
+  profile (people, pantry) lives in `USER.md` via the native `memory`
+  tool. Neither is written by hand outside those tools.
 - Acts on the owner's Mac through Plow Latch: browsing, and whatever
   else the owner has approved. Every Latch action goes through Latch's
   own approval gate — nothing runs unattended the first time.

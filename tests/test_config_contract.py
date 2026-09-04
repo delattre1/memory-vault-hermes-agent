@@ -36,8 +36,8 @@ def test_soul_md_exists():
     assert (ROOT / "runtime" / "SOUL.md").is_file()
 
 
-def test_soul_defines_the_family_assistant_persona():
-    assert "family assistant" in soul()
+def test_soul_defines_the_saved_content_memory_persona():
+    assert "a second memory for saved content" in soul()
 
 
 def test_soul_names_the_persona_jessie():
@@ -98,6 +98,11 @@ def test_no_credential_file_is_tracked():
         assert not base.endswith(".env"), f"{name} is tracked"
         assert not base.startswith(".env."), f"{name} is tracked"
         assert "auth.json" not in base, f"{name} is tracked"
+
+
+def test_saved_content_memory_provider_is_active():
+    config = yaml.safe_load((ROOT / "config.yaml").read_text())
+    assert config["memory"]["provider"] == "holographic"
 
 
 def test_every_compose_volume_source_exists():

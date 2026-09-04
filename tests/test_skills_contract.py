@@ -2,9 +2,14 @@ from pathlib import Path
 
 import pytest
 
+# A skill is any top-level folder with a SKILL.md -- no shared name prefix
+# (the fm-* convention was specific to the meal-planning domain this
+# project pivoted away from; see docs/roadmap.md).
 ROOT = Path(__file__).resolve().parent.parent
 SKILL_DIRS = sorted(
-    p.name for p in ROOT.glob("fm-*") if p.is_dir() and p.name != "fm-shared"
+    p.name
+    for p in ROOT.iterdir()
+    if p.is_dir() and not p.name.startswith(".") and (p / "SKILL.md").is_file()
 )
 
 
