@@ -8,4 +8,5 @@
 services:
   hermes:
     volumes:
+      - ${AGENT_DIR:?set by agent-mgr from the registry}/ingerir_conteudo:/opt/data/skills/ingerir_conteudo:ro
       - ${AGENT_DIR:?set by agent-mgr from the registry}/runtime/SOUL.md:/opt/data/SOUL.md:ro
