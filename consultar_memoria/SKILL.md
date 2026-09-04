@@ -29,8 +29,15 @@ not in `fact_store` (see `runtime/SOUL.md`, "Two kinds of memory").
 
 ## Filter
 
-None — use what `fact_store` returned as-is, within the `limit` you
-asked for. Don't re-rank it yourself.
+Drop any result with empty `tags`. Every fact `ingerir_conteudo` ever
+writes has tags — an untagged fact is leftover owner-profile data that
+leaked into `fact_store` by mistake (a known gap: it belongs in
+`memory`/`USER.md` and sometimes ends up written to both), not real
+saved content, and must never be cited or shown to the owner as
+something they saved.
+
+Otherwise, use what `fact_store` returned as-is, within the `limit`
+you asked for — no ranking script of our own on top of it.
 
 ## Post
 
