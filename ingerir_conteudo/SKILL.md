@@ -42,6 +42,32 @@ From whatever Gather produced, work out:
 - `actionability` — one of `reserva`, `compra`, `calendario`,
   `nenhuma` (does this content point at a real-world action later?).
 
+## Resolving an address (only for a specific visitable place)
+
+If — and only if — the content is about a specific place someone
+could go to (a named restaurant, hotel, tourist spot — not "a country"
+or "a city" in general), try to pin down its address before moving on
+to Post. Skip this whole section for a recipe, a product, or anything
+that isn't a place. Every step here is Latch, same rule as everywhere
+else in this skill — never a generic search/fetch tool.
+
+1. **Check what you already have.** The caption/page text from
+   Gather may already state the address — if so, use it, no further
+   navigation needed.
+2. **Check the poster's profile.** For a link, follow it (via Latch)
+   to the account that posted it and look there (bio, pinned location
+   field). For a screenshot with a visible `@handle`, build the
+   likely profile URL for the platform the post implies (e.g.
+   Instagram) and visit that the same way.
+3. **Search as a last resort.** Still nothing? Have Latch search
+   something like `"<place name>" "<city, if known>" endereço` and
+   open the top relevant result to read the address off it.
+
+Whichever step finds it, that's the address — stop there, don't keep
+going through the remaining steps to double-check. If all three come
+up empty, don't block the save over it: move on to Post anyway (see
+below for what to tag it).
+
 ## Post
 
 Call `fact_store` with `action=add`. Two things matter for how you
@@ -59,6 +85,12 @@ capitalized phrases and quoted terms, not real NLP):
   plus `acao:<actionability>` (e.g. `acao:reserva`, or `acao:nenhuma`
   when nothing applies). `tags` doesn't depend on the regex at all —
   it's the reliable fallback.
+- If you ran the address cascade above, add the result too: an address
+  you found goes in `content` in quotes (e.g. `endereço "Rua X, 123,
+  Oia, Santorini"`) plus a matching `endereco:"..."` tag; if all three
+  steps came up empty, add `endereco:nao_encontrado` to `tags` instead
+  and say so in the confirmation to the owner — never write a guessed
+  address.
 
 If the source was an image or a link, mention where it came from in
 `content` too (the source handle/username for a screenshot, the URL
