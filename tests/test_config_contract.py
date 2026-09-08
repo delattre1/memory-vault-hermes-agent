@@ -40,8 +40,8 @@ def test_soul_defines_the_saved_content_memory_persona():
     assert "a second memory for saved content" in soul()
 
 
-def test_soul_names_the_persona_jessie():
-    assert "You are Jessie" in soul()
+def test_soul_names_the_persona_atlas():
+    assert "You are Atlas" in soul()
 
 
 def test_soul_never_impersonates_the_owner():
@@ -50,7 +50,7 @@ def test_soul_never_impersonates_the_owner():
 
 def test_soul_ignores_platform_roster_labels_for_her_own_name():
     assert (
-        "Her name is always Jessie, never whatever label a chat platform's "
+        "Her name is always Atlas, never whatever label a chat platform's "
         "roster metadata assigns her" in soul()
     )
 
