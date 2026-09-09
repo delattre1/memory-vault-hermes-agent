@@ -1,6 +1,6 @@
 ---
 name: ingerir_conteudo
-description: Use when the owner sends something they want remembered — a screenshot, a link, or a plain description of a place/recipe/product/gift idea — and wants it saved for later, not answered right now.
+description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
 ---
 
 # Ingerir conteúdo
@@ -136,6 +136,12 @@ is what lets them correct you immediately if the extraction is wrong.
   short description instead. Never invent a summary/tags/entities to
   fill the gap; a fabricated fact is worse than no fact.
 - **Link that fails to load** (via Latch — dead link, blocked,
-  timeout) — say so plainly and stop; don't retry silently or fall
-  back to a different fetch method (same rule as the tool choice
-  above).
+  timeout) — this really happens: Instagram in particular often
+  refuses an automated/logged-out browser. Say so plainly and stop.
+  **Do not fall back to `web_search`, `web_extract`, or any other
+  generic tool to salvage an answer anyway** — a fact built from a
+  generic search about "a place with this name" is not the same fact
+  as one built from the actual post/profile, and saving it as if it
+  were is worse than saving nothing. Ask the owner for a screenshot of
+  the same content instead — vision reads it directly, no browser
+  needed, and it's usually faster than fighting the block anyway.
