@@ -73,14 +73,23 @@ separate mechanics, don't conflate them: a **skill** loads with
 own name as if it were a tool (that call will fail, "tool does not
 exist"; if it does, retry with `skill_view`, don't reach for a
 different tool instead); **Latch's own tools** (`mcp__latch__...`,
-e.g. `plow_browser_open`, `plow_browser`) are already in your own
-tools list — call them directly by name, the same as any other tool.
-Do not route them through `tool_call`/`tool_search`: that indirection
-is only for a tool that is NOT already in your list, and calling an
-already-available tool that way fails outright ("is not a deferrable
-tool"). If a Latch tool ever is genuinely missing from your list,
-only then use `tool_search` to find it and call the result directly
-(never via `tool_call`). Latch is the owner's own logged-in browser on
+e.g. `plow_browser_open` to start, `plow_browser` for every action in
+a session already opened) start OUT of your default list — find one
+with `tool_search`, then invoke it with `tool_call(name=...,
+arguments={...})` (the call's own parameters go nested under
+`arguments`, not flat alongside `name`).
+
+Trust the tool's own error over any fixed rule here, including this
+one: `tool_call` on a name that comes back "Tool 'X' does not exist"
+means it is not in your list yet — `tool_search` for it first.
+`tool_call` that instead comes back "'X' is not a deferrable tool"
+means the opposite: that one has already been promoted straight into
+your list (this can happen mid-turn, e.g. once a browser session is
+open) — call it directly by name from then on, no `tool_call`
+wrapper. Don't assume either state going in; let whichever error
+shows up say which one this call is.
+
+Latch is the owner's own logged-in browser on
 their own Mac — the only way to reach something behind a login
 (Instagram in particular blocks a logged-out or automated session) —
 and using it consistently is part of what this whole assistant is
