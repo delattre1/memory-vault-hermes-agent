@@ -52,21 +52,38 @@ that isn't a place. Every step here is Latch, same rule as everywhere
 else in this skill — never a generic search/fetch tool.
 
 1. **Check what you already have.** The caption/page text from
-   Gather may already state the address — if so, use it, no further
-   navigation needed.
+   Gather may already state the address — if so, use it **verbatim,
+   character for character** — no further navigation needed.
 2. **Check the poster's profile.** For a link, follow it (via Latch)
    to the account that posted it and look there (bio, pinned location
    field). For a screenshot with a visible `@handle`, build the
    likely profile URL for the platform the post implies (e.g.
    Instagram) and visit that the same way.
-3. **Search as a last resort.** Still nothing? Have Latch search
-   something like `"<place name>" "<city, if known>" endereço` and
-   open the top relevant result to read the address off it.
+3. **Search as a genuine last resort.** Only if steps 1 and 2 found
+   **nothing at all** — not to double-check something you already
+   found. Have Latch search something like `"<place name>" "<city, if
+   known>" endereço` and open the top relevant result to read the
+   address off it.
 
-Whichever step finds it, that's the address — stop there, don't keep
-going through the remaining steps to double-check. If all three come
-up empty, don't block the save over it: move on to Post anyway (see
-below for what to tag it).
+**A step that finds a real address ends the cascade — do not run a
+later step "to confirm."** This is the mistake that actually happened
+once: an address was sitting in the profile's own bio (Blumenau), and
+searching anyway to double-check it turned up a same-named place in a
+different city (Recife), which got written down instead of the
+correct one that had already been found. Two names being similar is
+not evidence they're the same place — a search result never
+outranks an address the source stated about itself, and never runs
+at all once steps 1–2 already produced one.
+
+**If a city or neighborhood is named anywhere in the source** (bio,
+caption, page text), any address you use — from any step — must be
+in that same city. A search result naming a different city is a
+different place, full stop; discard it and say in the confirmation
+that you couldn't pin down the exact address, rather than saving a
+wrong one that merely looks similar.
+
+If all three steps come up genuinely empty, don't block the save over
+it: move on to Post anyway (see below for what to tag it).
 
 ## Post
 
