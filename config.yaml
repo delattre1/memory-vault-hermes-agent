@@ -8,7 +8,7 @@
 # config.extra flag never reaches the gateway session store.
 group_sessions_per_user: false
 model:
-  default: z-ai/glm-5.3-flash
+  default: google/gemini-2.5-flash-lite
   provider: openrouter
 # Saved-content memory backend: the built-in holographic fact store (SQLite,
 # local, no API key -- confirmed reading the plugin source inside the image).
