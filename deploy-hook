@@ -1,3 +1,4 @@
+#!/bin/sh
 # Seed the atlas-* skills... this agent names its skills without a prefix, so
 # the set is explicit rather than a glob.
 #
@@ -20,7 +21,7 @@
 set -eu
 cd "$(dirname "$0")"
 home="${AGENT_HOME:?agent-mgr exports this}"
-skills_home="$home/skills/news"
+skills_home="$home/skills"
 
 skills="ingerir_conteudo consultar_memoria executar_acao_real aprender_com_uso"
 found=""

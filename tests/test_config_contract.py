@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-DESCRIPTOR_KEYS = {"AGENT_CONFIG", "AGENT_LIVE"}
+DESCRIPTOR_KEYS = {"AGENT_CONFIG", "AGENT_LIVE", "AGENT_DEPLOY_HOOK"}
 
 
 def soul():
