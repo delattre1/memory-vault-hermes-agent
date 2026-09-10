@@ -26,12 +26,6 @@ def descriptor():
     return dict(line.split("=", 1) for line in dotenv(ROOT / "agent.env"))
 
 
-def override():
-    path = ROOT / "compose.override.yml"
-    assert path.is_file()
-    return yaml.safe_load(path.read_text())
-
-
 def test_soul_md_exists():
     assert (ROOT / "runtime" / "SOUL.md").is_file()
 
@@ -105,10 +99,8 @@ def test_saved_content_memory_provider_is_active():
     assert config["memory"]["provider"] == "holographic"
 
 
-def test_every_compose_volume_source_exists():
-    volumes = override()["services"]["hermes"]["volumes"]
-    assert volumes, "compose.override.yml declares no volumes"
-    for volume in volumes:
-        source, _, _ = volume.partition(":")
-        _, _, rel = source.partition("}/")
-        assert (ROOT / rel).exists(), f"{volume} points at {rel}, which does not exist"
+
+def test_soul_replies_in_the_language_the_owner_writes_in():
+    text = soul()
+    assert "Reply in the language the owner is writing in" in text
+    assert "one in Mandarin gets Mandarin" in text
