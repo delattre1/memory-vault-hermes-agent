@@ -73,8 +73,8 @@ def test_descriptor_is_documented_in_env_example():
 
 def test_readme_points_at_the_real_spec():
     readme = (ROOT / "README.md").read_text()
-    assert "2026-09-03-jessy-content-memory-pivot-design.md" in readme
-    spec = ROOT / "docs/superpowers/specs/2026-09-03-jessy-content-memory-pivot-design.md"
+    assert "2026-09-03-jessie-content-memory-pivot-design.md" in readme
+    spec = ROOT / "docs/superpowers/specs/2026-09-03-jessie-content-memory-pivot-design.md"
     assert spec.is_file(), "README links a spec that does not exist"
 
 
