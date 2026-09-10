@@ -19,6 +19,12 @@ question, then synthesize.
 - **One clear central entity** (a person, a single place, a single
   topic) → `fact_store(action="probe", entity="...")` — everything
   saved about it.
+- **A self-reflective question about patterns across everything
+  saved** ("o que eu aparentemente gosto?", "o que isso diz sobre
+  mim?", "analisa o que eu salvei", "faça um resumo do que eu tenho
+  guardado") → `fact_store(action="search", query="", limit=200)` (or
+  the highest `limit` available) — pull as broad a sample as you can,
+  not a targeted match. This shape is answered differently; see Post.
 - **Neither** (a broad or vague question — "o que eu andei salvando
   esse mês?") → `fact_store(action="search", query="...")` as the
   general fallback.
@@ -37,7 +43,10 @@ saved content, and must never be cited or shown to the owner as
 something they saved.
 
 Otherwise, use what `fact_store` returned as-is, within the `limit`
-you asked for — no ranking script of our own on top of it.
+you asked for — no ranking script of our own on top of it. (The
+self-reflective question above is the one exception: there, counting
+how often each tag actually appears IS the analysis, not a ranking
+imposed on individual results.)
 
 ## Post
 
@@ -45,13 +54,27 @@ Synthesize a real answer from the facts you got back — an itinerary,
 a recipe match, a gift list, a recap — not a raw list of what was
 retrieved. Cite what you actually used.
 
+**For the self-reflective question**, the answer is different in
+kind: count how often each tag/theme actually appears across what came
+back, and say what you notice — the category that dominates, one
+interesting or unexpected pattern, maybe an `acao:*` tag that shows up
+over and over with nothing ever done about it. This is an analysis of
+what the owner chose to save, not a recommendation engine — never
+invent a pattern the counted facts don't actually show, and never
+stretch a handful of saves into a sweeping claim. Plain and specific
+beats a corporate-report tone: "você salvou 18 restaurantes, a maioria
+japoneses e italianos" over "you show a strong affinity for East Asian
+and Mediterranean cuisine."
+
 If any fact you cited carries an `acao:*` tag other than
 `acao:nenhuma`, say so and hand off to `executar_acao_real` instead of
 just describing the action.
 
 After answering, call `fact_feedback(action="helpful", fact_id=...)`
 on every fact you actually cited — that's what trains `fact_store` for
-next time. Don't rate facts you looked at but didn't use.
+next time. Don't rate facts you looked at but didn't use. Skip this
+for the self-reflective question — nothing there was individually
+cited, the count across all of them was.
 
 ## When there's nothing relevant
 
