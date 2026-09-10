@@ -93,6 +93,30 @@ wrong one that merely looks similar.
 If all three steps come up genuinely empty, don't block the save over
 it: move on to Post anyway (see below for what to tag it).
 
+## Check for a duplicate
+
+Before writing a new fact, search for one that may already be about
+the same thing: `fact_store(action="search", query="<the main entity
+name>")`. The same post reaches you twice more often than it seems —
+Instagram and WhatsApp both surface it, or the owner forwards
+something they saved days ago without remembering they already did —
+and that is not a second thing to save.
+
+- **A result names the same entity (the same restaurant, recipe,
+  book, product) and has nothing this save adds** — don't call
+  `fact_store(action="add")`. Tell the owner it's already saved
+  instead of silently duplicating it (e.g. "já tinha salvo isso, no
+  dia X").
+- **A result names the same entity but this save has something the
+  earlier one didn't** (an address you found this time, a different
+  context, a detail that changed) — `fact_store(action="update",
+  fact_id=..., ...)` on the existing fact rather than adding a second
+  one for the same thing.
+- **No result, or one that only sounds similar** — proceed to Post.
+  A name being close is not evidence it's the same thing — the same
+  rule the address cascade above already applies to a search result
+  naming a different city.
+
 ## Post
 
 Call `fact_store` with `action=add`. Two things matter for how you
