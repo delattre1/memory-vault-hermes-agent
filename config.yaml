@@ -2,6 +2,17 @@
 # choice for this deployment. Keys equal to the image's own defaults are
 # deliberately absent, so the pinned image supplies its current defaults rather
 # than a frozen snapshot of them.
+#
+# _config_version pinned to the base image's own seed
+# (/opt/hermes/plow-seed/config.yaml inside the container, same value at its
+# end) -- without it, this file has no version at all, which the image's
+# config-migrate step treats as "too old to migrate" and silently falls back
+# to the seed's own defaults for anything this file also sets, model included
+# (confirmed live: model: google/gemini-2.5-flash-lite/openrouter below never
+# took effect until this line was added -- every boot kept resetting to
+# anthropic/claude-sonnet-5/plow instead, with a "predates version 12" warning
+# in `docker logs` as the only clue).
+_config_version: 37
 # One session per group chat, shared by every participant. Present despite the
 # "absent keys mean image defaults" rule above: the image default (true) splits
 # a group thread into per-sender sessions, and the plow-chat plugin's
