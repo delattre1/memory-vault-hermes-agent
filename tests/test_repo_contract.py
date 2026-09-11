@@ -35,13 +35,20 @@ def test_deploy_hook_publishes_soul_md_every_deploy():
     assert "published SOUL.md" in text
 
 
-def test_no_compose_override_remains():
+def test_compose_override_carries_no_skill_mounts():
     # Skills ride the deploy-hook seed into the agent's home, not :ro
     # mounts -- a :ro mount makes the agent's own skill edits die with
-    # EROFS. See docs/roadmap.md, US-25.
-    assert not (ROOT / "compose.override.yml").exists(), (
-        "compose.override.yml is a leftover of the mount-based deployment; "
-        "the deploy-hook owns skill seeding now"
+    # EROFS. The file itself is legitimate for other things a container
+    # needs (HERMES_PROVIDER/HERMES_MODEL, read by plow-init from the real
+    # process environment, never from the home .env) -- only a `volumes:`
+    # section reintroducing the old mount-based skill delivery is the
+    # regression this guards against.
+    override = ROOT / "compose.override.yml"
+    if not override.is_file():
+        return
+    assert "volumes:" not in override.read_text(), (
+        "compose.override.yml declares volumes: -- skills are seeded by "
+        "the deploy-hook now, not mounted read-only"
     )
 
 
