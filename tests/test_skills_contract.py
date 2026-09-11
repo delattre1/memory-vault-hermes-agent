@@ -55,7 +55,8 @@ def test_ingest_skill_defines_the_relation_vocabulary():
 
 def test_ingest_skill_routes_bare_person_statements():
     text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
-    assert "bare statement about a person" in text
+    assert "bare statement about their own life" in text
+    assert "a person in it" in text
 
 
 def test_ingest_skill_updates_a_changed_person_plan_in_place():
@@ -63,9 +64,42 @@ def test_ingest_skill_updates_a_changed_person_plan_in_place():
     assert "the newer statement is the current truth" in text
 
 
+def test_ingest_skill_resolves_stated_times_to_absolute_dates():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    assert "resolved to the absolute date" in text
+
+
+def test_ingest_skill_tags_bare_personal_events_as_diario():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    assert "`diario`" in text
+
+
 def test_consult_skill_answers_connection_questions_from_relation_tags():
     text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
     assert "relacao:*" in text
+
+
+def test_consult_skill_answers_temporal_recaps_chronologically():
+    text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
+    assert "A temporal recap" in text
+
+
+def test_ingest_skill_resurfaces_only_when_it_earns_it():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    assert "Silence is the default; a resurface is the\nexception." in text
+    assert "≥14 days" in text
+    assert "≥7 days" in text
+    assert "never claim\n    anything was or wasn't done about it" in text
+    assert "🧠-marked" in text
+
+
+def test_consult_skill_resurfaces_from_cited_facts_only():
+    text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
+    assert "Below threshold,\nsilence." in text
+    assert "on a turn that\nhands off to `executar_acao_real`" in text
+    assert "on a temporal recap" in text
+    assert "already surfaced the same connection" in text
+    assert "🧠 line" in text
 
 
 def test_consult_skill_widens_a_thin_probe_before_search():

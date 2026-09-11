@@ -1,6 +1,6 @@
 ---
 name: consultar_memoria
-description: Use when the owner asks an open question that should draw on what they've saved — an itinerary from saved places, a recipe from the pantry, gift ideas, a recap of what was saved recently, what you know about a person — rather than a fresh answer from scratch.
+description: Use when the owner asks an open question that should draw on what they've saved — an itinerary from saved places, a recipe from the pantry, gift ideas, a recap of what was saved recently, what you know about a person, a timeline of what happened this week — rather than a fresh answer from scratch.
 ---
 
 # Consultar memória
@@ -30,6 +30,14 @@ question, then synthesize.
   guardado") → `fact_store(action="search", query="", limit=200)` (or
   the highest `limit` available) — pull as broad a sample as you can,
   not a targeted match. This shape is answered differently; see Post.
+- **A temporal recap** ("o que aconteceu comigo essa semana?", "meu
+  mês em resumo", "o que eu andei fazendo?") → the same broad pull as
+  the self-reflective question: `fact_store(action="search", query="",
+  limit=200)`. The difference is the cut: keep the facts inside the
+  asked window (read `created_at`, plus the dates the content states),
+  order chronologically, narrate. One call — there is no date-range
+  query in `fact_store`, so the window is cut on results, never on
+  repeated filtered searches.
 - **Neither** (a broad or vague question — "o que eu andei salvando
   esse mês?") → `fact_store(action="search", query="...")` as the
   general fallback.
@@ -85,6 +93,25 @@ stretch a handful of saves into a sweeping claim. Plain and specific
 beats a corporate-report tone: "você salvou 18 restaurantes, a maioria
 japoneses e italianos" over "you show a strong affinity for East Asian
 and Mediterranean cuisine."
+
+**Resurfacing** — after a real answer, one 🧠 line is allowed when a
+strong connection sits in facts you cited or already fetched: a cited
+entity also sits in ≥2 facts ≥14 days old, or a tag repeats across
+≥3 facts spanning ≥30 days ("isso voltou a aparecer: 5 restaurantes
+japoneses e 3 receitas de ramen"). One line, observation never an
+order, span read off `created_at`. Skip it on a self-reflective
+question (that answer already IS the analysis), on a temporal recap
+(the timeline already IS the connection, narrated), on a turn that
+hands off to `executar_acao_real` (the action is the point), and when
+this session already surfaced the same connection. Below threshold,
+silence.
+
+**For a temporal recap**, the answer is a timeline: the facts inside
+the window, chronological, dated, in the owner's own life terms
+("segunda você salvou X; quarta jantou no Y com Maria") — not a grouped
+report, not a dump. Facts outside the window are dropped, not
+mentioned. Facts cited this way are individually cited, so they get
+`fact_feedback` as usual.
 
 If any fact you cited carries an `acao:*` tag other than
 `acao:nenhuma`, say so and hand off to `executar_acao_real` instead of

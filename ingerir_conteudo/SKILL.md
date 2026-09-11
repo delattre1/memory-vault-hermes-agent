@@ -1,6 +1,6 @@
 ---
 name: ingerir_conteudo
-description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a bare statement about a person in their life (a recommendation, a plan, who they were with) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/statement defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
+description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a bare statement about their own life, a person in it (a recommendation, a plan, who they were with) or something that happened (a dinner, a fight, a day) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/statement defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
 ---
 
 # Ingerir conteúdo
@@ -44,9 +44,16 @@ From whatever Gather produced, work out:
 
 - `summary` — one sentence.
 - `tags` — a short comma-separated list of the concepts involved
-  (e.g. `viagem,praia,grecia,restaurante`).
+  (e.g. `viagem,praia,grecia,restaurante`); a bare personal event
+  (something that happened to the owner, not something found online)
+  always includes `diario` among them.
 - `entities` — the proper nouns involved (place names, dish names,
   product names, person names).
+- `when` — a date the statement itself fixes ("hoje", "ontem", "sexta
+  passada"), resolved to the absolute date and written into the
+  content (e.g. "... em 2026-09-09"). `created_at` records the save,
+  not the event — an "ontem" saved today would misorder a timeline by
+  a day otherwise.
 - `actionability` — one of `reserva`, `compra`, `calendario`,
   `nenhuma` (does this content point at a real-world action later?).
 - `relations` — connections the content itself states (who recommended
@@ -199,6 +206,38 @@ fact_store(
 After the call, confirm to the owner in one line what you understood
 and saved (e.g. "salvei: Santorini, praia, grécia, restaurante") — this
 is what lets them correct you immediately if the extraction is wrong.
+
+## Resurface — only when it earns it
+
+One chance per save to be the wow moment the vault describes
+(`docs/plow-memory-vault.md` §10): a connection between what just
+landed and something old. Silence is the default; a resurface is the
+exception.
+
+- **Use what the turn already fetched.** The duplicate-check search
+  above is already the sample of older memories about this entity,
+  and its results carry `created_at` (first saved). Compute from
+  those, plus the fact just written. Only if that search came back
+  empty is one `probe` on the new fact's main entity allowed — the
+  only extra call; empty again → silence.
+- **Earn it** — any one of these, all computed from real retrieved
+  facts, never from vibes:
+  - *Span* — the new fact's entity also sits in ≥2 facts whose
+    `created_at` is ≥14 days old.
+  - *Theme* — one of the new fact's tags already appears in ≥3 facts
+    spanning ≥30 days.
+  - *Stale intent* — the turn touched a fact with an `acao:*` tag (≠
+    `acao:nenhuma`) whose `created_at` is ≥7 days old: "há 23 dias
+    você salvou o X querendo reservar". State the fact; never claim
+    anything was or wasn't done about it.
+- **Shape**: one line, after the confirmation, 🧠-marked (the vault's
+  §10 marker), an observation with an optional offer — "quer que eu
+  reúna?" — never an order, never more than one. Name the span you
+  read off `created_at` ("47 dias atrás").
+- **Skip it** when no threshold is met, when this session already
+  surfaced the same connection, or when nothing was saved this turn
+  (a pure duplicate — the owner just got told it was already there;
+  nothing new to connect).
 
 ## When it doesn't go cleanly
 
