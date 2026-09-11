@@ -1,5 +1,5 @@
 ---
-name: ingerir_conteudo
+name: mv-ingest
 description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a bare statement about their own life, a person in it (a recommendation, a plan, who they were with) or something that happened (a dinner, a fight, a day) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/statement defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
 ---
 

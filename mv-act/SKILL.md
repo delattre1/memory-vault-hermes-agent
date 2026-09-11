@@ -1,6 +1,6 @@
 ---
-name: executar_acao_real
-description: Use whenever the owner wants to actually move forward on something saved — a reservation, a purchase, adding to the calendar — whether that follows a `consultar_memoria` answer in the same turn or the owner asks directly ("avança a reserva que salvei", "compra isso"). The trigger is the owner's intent to act, not a specific prior tool call.
+name: mv-act
+description: Use whenever the owner wants to actually move forward on something saved — a reservation, a purchase, adding to the calendar — whether that follows a `mv-recall` answer in the same turn or the owner asks directly ("avança a reserva que salvei", "compra isso"). The trigger is the owner's intent to act, not a specific prior tool call.
 ---
 
 # Executar ação real
@@ -13,7 +13,7 @@ moves the specific action forward, never more.
 ## Gather
 
 Read the `acao:*` tag on the fact that triggered this (from
-`consultar_memoria`'s citation) and the owner's own message for
+`mv-recall`'s citation) and the owner's own message for
 specifics (a date, a restaurant name, a budget) — ask for what's
 missing before acting if the fact alone isn't enough to act on
 correctly.

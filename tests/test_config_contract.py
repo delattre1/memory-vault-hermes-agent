@@ -34,18 +34,25 @@ def test_soul_defines_the_saved_content_memory_persona():
     assert "a second memory for saved content" in soul()
 
 
-def test_soul_names_the_persona_atlas():
-    assert "You are Atlas" in soul()
+def test_soul_names_the_memory_vault():
+    assert "You are the Memory Vault" in soul()
+
+
+def test_soul_is_not_a_person():
+    assert "You are not a person and not a character" in soul()
+    assert "say you're a memory assistant" in soul()
 
 
 def test_soul_never_impersonates_the_owner():
-    assert "identifies herself as the assistant, never as the owner" in soul()
-
-
-def test_soul_ignores_platform_roster_labels_for_her_own_name():
     assert (
-        "Her name is always Atlas, never whatever label a chat platform's "
-        "roster metadata assigns her" in soul()
+        "identifies itself as a memory assistant, never as the owner" in soul()
+    )
+
+
+def test_soul_ignores_platform_roster_labels_for_its_own_name():
+    assert (
+        "The name is always Memory Vault, never whatever label a chat "
+        "platform's roster metadata assigns" in soul()
     )
 
 

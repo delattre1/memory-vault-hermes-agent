@@ -1,5 +1,5 @@
 ---
-name: consultar_memoria
+name: mv-recall
 description: Use when the owner asks an open question that should draw on what they've saved — an itinerary from saved places, a recipe from the pantry, gift ideas, a recap of what was saved recently, what you know about a person, a timeline of what happened this week — rather than a fresh answer from scratch.
 ---
 
@@ -57,7 +57,7 @@ reads the dates off results you already have, no second call.
 
 ## Filter
 
-Drop any result with empty `tags`. Every fact `ingerir_conteudo` ever
+Drop any result with empty `tags`. Every fact `mv-ingest` ever
 writes has tags — an untagged fact is leftover owner-profile data that
 leaked into `fact_store` by mistake (a known gap: it belongs in
 `memory`/`USER.md` and sometimes ends up written to both), not real
@@ -102,7 +102,7 @@ japoneses e 3 receitas de ramen"). One line, observation never an
 order, span read off `created_at`. Skip it on a self-reflective
 question (that answer already IS the analysis), on a temporal recap
 (the timeline already IS the connection, narrated), on a turn that
-hands off to `executar_acao_real` (the action is the point), and when
+hands off to `mv-act` (the action is the point), and when
 this session already surfaced the same connection. Below threshold,
 silence.
 
@@ -114,7 +114,7 @@ mentioned. Facts cited this way are individually cited, so they get
 `fact_feedback` as usual.
 
 If any fact you cited carries an `acao:*` tag other than
-`acao:nenhuma`, say so and hand off to `executar_acao_real` instead of
+`acao:nenhuma`, say so and hand off to `mv-act` instead of
 just describing the action.
 
 After answering, call `fact_feedback(action="helpful", fact_id=...)`

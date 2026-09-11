@@ -1,5 +1,5 @@
 ---
-name: aprender_com_uso
+name: mv-learn
 description: Use when the owner corrects something about a saved item ("isso é receita, não produto", "essa entidade tá errada", "não era isso que eu quis dizer") — fixes it in place, right away.
 ---
 
@@ -8,7 +8,7 @@ description: Use when the owner corrects something about a saved item ("isso é 
 Most of the learning loop is already native and automatic, not this
 skill's job:
 
-- `consultar_memoria` already calls `fact_feedback` on every fact it
+- `mv-recall` already calls `fact_feedback` on every fact it
   cites — that trains `fact_store`'s trust score on its own.
 - Hermes' own skill-authoring loop (`hermes journey`) is the deeper
   mechanism for learning across sessions.

@@ -1,6 +1,7 @@
 #!/bin/sh
-# Seed the atlas-* skills... this agent names its skills without a prefix, so
-# the set is explicit rather than a glob.
+# Seed the mv-* skills -- the same prefix pattern the sibling agents use
+# (pt-* for the-plow-times). A prefixed name is also what keeps the
+# agent-authored skills (unprefixed) apart from the shipped ones.
 #
 # The skills used to be :ro mounts via compose.override.yml, which meant the
 # agent could not edit them -- every skill_manage write died with EROFS. The
@@ -23,18 +24,17 @@ cd "$(dirname "$0")"
 home="${AGENT_HOME:?agent-mgr exports this}"
 skills_home="$home/skills"
 
-skills="ingerir_conteudo consultar_memoria executar_acao_real aprender_com_uso"
 found=""
-for dir in $skills; do
-    [ -d "$dir" ] || { echo "atlas: missing skill dir $dir -- broken checkout" >&2; exit 1; }
-    [ -f "$dir/SKILL.md" ] || { echo "atlas: $dir has no SKILL.md -- broken checkout" >&2; exit 1; }
+for dir in mv-*; do
+    [ -d "$dir" ] || { echo "memory-vault: $dir matched but is not a directory -- broken checkout" >&2; continue; }
+    [ -f "$dir/SKILL.md" ] || { echo "memory-vault: $dir has no SKILL.md -- broken checkout" >&2; exit 1; }
     found="$found $dir"
     dest="$skills_home/$dir"
     # An EMPTY dir is absent, not the agent's copy: a retired mount could have
     # left its bare mountpoint behind. rmdir encodes that state directly -- it
     # removes only an empty dir, and a non-empty (agent-owned) one makes it
     # fail, which is the keep signal.
-    [ ! -e "$dest" ] || rmdir "$dest" 2>/dev/null || { echo "atlas: keeping agent-owned $dest"; continue; }
+    [ ! -e "$dest" ] || rmdir "$dest" 2>/dev/null || { echo "memory-vault: keeping agent-owned $dest"; continue; }
     # Stage beside the destination and rename into place, the same shape
     # agent-mgr's fetch-tree uses: an interrupted copy leaves *.incoming,
     # never a half skill that a later deploy would mistake for the agent's.
@@ -42,15 +42,16 @@ for dir in $skills; do
     rm -rf "$dest.incoming"
     cp -R "$dir" "$dest.incoming"
     mv "$dest.incoming" "$dest"
-    echo "atlas: seeded $dir into $dest"
+    echo "memory-vault: seeded $dir into $dest"
 done
+[ -n "$found" ] || { echo "memory-vault: no mv-* skill dirs -- broken checkout" >&2; exit 1; }
 
 # The persona, published every deploy like config.yaml is.
 if [ -f runtime/SOUL.md ]; then
     cp runtime/SOUL.md "$home/SOUL.md.incoming"
     mv "$home/SOUL.md.incoming" "$home/SOUL.md"
-    echo "atlas: published SOUL.md to $home"
+    echo "memory-vault: published SOUL.md to $home"
 else
-    echo "atlas: no runtime/SOUL.md -- broken checkout" >&2
+    echo "memory-vault: no runtime/SOUL.md -- broken checkout" >&2
     exit 1
 fi

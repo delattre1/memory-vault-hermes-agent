@@ -3,10 +3,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 SKILLS = (
-    "ingerir_conteudo",
-    "consultar_memoria",
-    "executar_acao_real",
-    "aprender_com_uso",
+    "mv-ingest",
+    "mv-recall",
+    "mv-act",
+    "mv-learn",
 )
 
 
@@ -15,10 +15,18 @@ def deploy_hook():
 
 
 def test_deploy_hook_seeds_every_skill():
-    for skill in SKILLS:
-        assert f'"{skill}"' in deploy_hook() or skill in deploy_hook(), (
-            f"deploy-hook does not seed {skill}"
-        )
+    text = deploy_hook()
+    # The pt-* pattern: the seed rides a glob, and an empty match is a
+    # broken checkout, not a silent pass. Which dirs exist is the other
+    # tests' job (SKILLS above + test_skills_contract's discovery).
+    assert "for dir in mv-*" in text
+    assert 'no mv-* skill dirs -- broken checkout' in text
+
+
+def test_shipped_skills_are_exactly_the_mv_dirs():
+    # The shipped set is this tuple -- no stray mv-* dir, no missing one.
+    globbed = sorted(p.name for p in ROOT.glob("mv-*") if p.is_dir())
+    assert globbed == sorted(SKILLS)
 
 
 def test_deploy_hook_seeds_skills_copy_if_absent():
