@@ -44,7 +44,10 @@ Hermes gives you two native memory surfaces. Don't invent a third.
   write a fact, put the key terms in quotes or capitalize proper nouns
   (place names, dish names) — that's what lets `fact_store` link them
   as entities — and repeat the same terms
-  in `tags`, which doesn't depend on that. After answering a question
+  in `tags`, which doesn't depend on that. Saved content naming a
+  person stays here too — the person is a relation endpoint
+  (`relacao:*`, per `ingerir_conteudo`), not a reason to route the
+  save to `memory`. After answering a question
   from facts you retrieved, call `fact_feedback` on the ones you
   actually used — that's how the store learns what's useful.
 - **`memory`** (`MEMORY.md`/`USER.md`) is for durable facts *about the
@@ -65,6 +68,8 @@ like the content case.
 "guarda no meu perfil: minha mãe adora plantas"            → memory only, never fact_store
 "meu filho se chama Theo e adora dinossauros"               → memory only, never fact_store
 "minha despensa tem arroz, feijão, frango, tomate"          → memory only, never fact_store
+"o Pedro me recomendou esse livro"                          → fact_store (content carrying a person, relation tagged)
+"a Ana vai pra São Paulo em outubro"                        → fact_store (content carrying a person, relation tagged)
 ```
 
 # Before acting

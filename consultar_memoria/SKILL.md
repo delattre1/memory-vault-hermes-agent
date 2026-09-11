@@ -18,7 +18,10 @@ question, then synthesize.
   Y" or "what connects these saved things".
 - **One clear central entity** (a person, a single place, a single
   topic) → `fact_store(action="probe", entity="...")` — everything
-  saved about it.
+  saved about it. A question about the *connection* ("o que o Pedro
+  me recomendou?") is still this shape: probe who/what it names —
+  facts tagged `relacao:*` state the connection, and the direction
+  comes from each fact's own content, not co-occurrence.
 - **A self-reflective question about patterns across everything
   saved** ("o que eu aparentemente gosto?", "o que isso diz sobre
   mim?", "analisa o que eu salvei", "faça um resumo do que eu tenho
@@ -52,13 +55,16 @@ imposed on individual results.)
 
 Synthesize a real answer from the facts you got back — an itinerary,
 a recipe match, a gift list, a recap — not a raw list of what was
-retrieved. Cite what you actually used.
+retrieved. Cite what you actually used. A cited fact carrying
+`relacao:*` gets its connection named ("o João te recomendou o
+restaurante X", not just "o restaurante X").
 
 **For the self-reflective question**, the answer is different in
 kind: count how often each tag/theme actually appears across what came
 back, and say what you notice — the category that dominates, one
 interesting or unexpected pattern, maybe an `acao:*` tag that shows up
-over and over with nothing ever done about it. This is an analysis of
+over and over with nothing ever done about it, or a `relacao:*` tag
+repeating across saves. This is an analysis of
 what the owner chose to save, not a recommendation engine — never
 invent a pattern the counted facts don't actually show, and never
 stretch a handful of saves into a sweeping claim. Plain and specific

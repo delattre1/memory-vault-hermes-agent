@@ -30,3 +30,34 @@ def test_every_skill_md_description_says_when_to_use_it(skill):
     text = (ROOT / skill / "SKILL.md").read_text()
     frontmatter = text.split("---")[1] if text.startswith("---") else ""
     assert "Use when" in frontmatter
+
+
+# The closed relation vocabulary of the memory graph (docs/plow-memory-vault.md
+# §7/§8/§14): every relation the vault names, as a relacao:* tag. The ingest
+# skill defines them; the consult and learn skills must handle them.
+RELATION_TAGS = (
+    "relacao:recomendou",
+    "relacao:localizado_em",
+    "relacao:culinaria",
+    "relacao:foi_com",
+    "relacao:quer_visitar",
+    "relacao:vai_para",
+    "relacao:presente_para",
+    "relacao:usa_ingrediente",
+)
+
+
+def test_ingest_skill_defines_the_relation_vocabulary():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    for tag in RELATION_TAGS:
+        assert tag in text, f"ingerir_conteudo does not define {tag}"
+
+
+def test_consult_skill_answers_connection_questions_from_relation_tags():
+    text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
+    assert "relacao:*" in text
+
+
+def test_learn_skill_preserves_relation_tags_on_update():
+    text = (ROOT / "aprender_com_uso" / "SKILL.md").read_text()
+    assert "including the `relacao:*` tags" in text

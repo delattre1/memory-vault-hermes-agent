@@ -70,6 +70,10 @@ def test_soul_contains_the_decision_trigger_rule():
     )
 
 
+def test_soul_keeps_person_carrying_content_in_the_fact_store():
+    assert "content carrying a person, relation tagged" in soul()
+
+
 def test_soul_requires_real_actions_to_be_auditable():
     assert (
         "must be identifiable afterward through `hermes sessions export`"

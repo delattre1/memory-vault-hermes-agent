@@ -26,8 +26,10 @@ for it. Never guess a fact_id.
 
 Work out what actually changes: a wrong tag, a wrong category, a
 detail the extraction got backwards. Keep everything else about the
-fact as-is — a correction fixes the one thing named, it doesn't
-re-extract from scratch.
+fact as-is — including the `relacao:*` tags (an update rewrites `tags`
+wholesale; dropping them silently disconnects the fact from the graph)
+— a correction fixes the one thing named, it doesn't re-extract from
+scratch.
 
 ## Post
 

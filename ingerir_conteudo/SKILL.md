@@ -49,6 +49,9 @@ From whatever Gather produced, work out:
   product names, person names).
 - `actionability` — one of `reserva`, `compra`, `calendario`,
   `nenhuma` (does this content point at a real-world action later?).
+- `relations` — connections the content itself states (who recommended
+  it, where it is, who the owner was with, who it's for), named with
+  the closed vocabulary in the Relations section below.
 
 ## Resolving an address (only for a specific visitable place)
 
@@ -117,6 +120,38 @@ and that is not a second thing to save.
   rule the address cascade above already applies to a search result
   naming a different city.
 
+## Name the relations
+
+A saved thing often names a connection — who recommended it, where it
+is, who the owner was with. The quotes in `content` connect the
+endpoints as entities; the *name* of the connection goes in `tags` as
+one `relacao:<verbo>` per relation, from this closed vocabulary only
+(every relation `docs/plow-memory-vault.md` §7/§8/§14 names, no
+others):
+
+| Tag | Reads as | Example source |
+|---|---|---|
+| `relacao:recomendou` | person → thing | "O Pedro me recomendou esse livro" |
+| `relacao:localizado_em` | place → place | "...restaurante japonês em São Paulo" |
+| `relacao:culinaria` | place → cuisine | "...restaurante japonês" |
+| `relacao:foi_com` | owner → person | "Fui no restaurante X com João" |
+| `relacao:quer_visitar` | owner → place | "quero conhecer" |
+| `relacao:vai_para` | person → place | "A Ana vai para São Paulo em outubro" |
+| `relacao:presente_para` | idea → person | "presente pra minha mãe" |
+| `relacao:usa_ingrediente` | recipe → ingredient | the recipe's ingredient list |
+
+- Both endpoints **quoted** in `content` — the quotes link the second
+  endpoint as an entity, so `probe("João")` / `reason(["João", ...])`
+  find the fact later; the tag alone only names the connection.
+  Recipes: name the key ingredients, quoted — they are what a later
+  `reason` call needs to hit.
+- Only what the source states; nothing in the table fits → tag
+  nothing. A fabricated relation is a fabricated fact.
+- Relation arriving after the first save → `fact_store
+  action="update"` on the existing fact (merge the new tag and
+  endpoint in — `update` rewrites passed fields wholesale), never a
+  second fact. This is vault.md §14's "Existing Memory Update".
+
 ## Post
 
 Call `fact_store` with `action=add`. Two things matter for how you
@@ -130,10 +165,10 @@ capitalized phrases and quoted terms, not real NLP):
   `"Grécia"`) — quoting is a second, independent way `fact_store`
   recognizes a term, so an entity that's quoted AND capitalized is
   linked reliably even if one signal alone would have missed it.
-- Pass `tags` as the same concepts from your extraction, comma-separated,
-  plus `acao:<actionability>` (e.g. `acao:reserva`, or `acao:nenhuma`
-  when nothing applies). `tags` doesn't depend on the regex at all —
-  it's the reliable fallback.
+- Pass `tags` as the concepts from your extraction, comma-separated,
+  plus `acao:<actionability>` and one `relacao:<verbo>` per relation
+  (Relations above). `tags` doesn't depend on the regex — it's the
+  reliable fallback.
 - If you ran the address cascade above, add the result too: an address
   you found goes in `content` in quotes (e.g. `endereço "Rua X, 123,
   Oia, Santorini"`) plus a matching `endereco:"..."` tag; if all three
@@ -153,7 +188,7 @@ Example call:
 fact_store(
   action="add",
   content='Post de "viagem": praia em "Santorini", "Grécia" — restaurante à beira-mar, possível "reserva". Fonte: @viagens.inspira.',
-  tags="viagem,praia,grecia,restaurante,acao:reserva",
+  tags="viagem,praia,grecia,restaurante,acao:reserva,relacao:quer_visitar",
 )
 ```
 
