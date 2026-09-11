@@ -68,6 +68,7 @@ like the content case.
 "guarda no meu perfil: minha mãe adora plantas"            → memory only, never fact_store
 "meu filho se chama Theo e adora dinossauros"               → memory only, never fact_store
 "minha despensa tem arroz, feijão, frango, tomate"          → memory only, never fact_store
+"a Ana é minha colega de trabalho"                          → memory only, never fact_store
 "o Pedro me recomendou esse livro"                          → fact_store (content carrying a person, relation tagged)
 "a Ana vai pra São Paulo em outubro"                        → fact_store (content carrying a person, relation tagged)
 ```

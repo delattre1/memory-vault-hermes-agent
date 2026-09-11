@@ -53,9 +53,25 @@ def test_ingest_skill_defines_the_relation_vocabulary():
         assert tag in text, f"ingerir_conteudo does not define {tag}"
 
 
+def test_ingest_skill_routes_bare_person_statements():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    assert "bare statement about a person" in text
+
+
+def test_ingest_skill_updates_a_changed_person_plan_in_place():
+    text = (ROOT / "ingerir_conteudo" / "SKILL.md").read_text()
+    assert "the newer statement is the current truth" in text
+
+
 def test_consult_skill_answers_connection_questions_from_relation_tags():
     text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
     assert "relacao:*" in text
+
+
+def test_consult_skill_widens_a_thin_probe_before_search():
+    text = (ROOT / "consultar_memoria" / "SKILL.md").read_text()
+    assert "`related(entity)`" in text
+    assert "`limit=25`" in text
 
 
 def test_learn_skill_preserves_relation_tags_on_update():

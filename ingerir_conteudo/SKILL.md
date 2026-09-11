@@ -1,6 +1,6 @@
 ---
 name: ingerir_conteudo
-description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
+description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a bare statement about a person in their life (a recommendation, a plan, who they were with) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/statement defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
 ---
 
 # Ingerir conteúdo
@@ -151,6 +151,10 @@ others):
   action="update"` on the existing fact (merge the new tag and
   endpoint in — `update` rewrites passed fields wholesale), never a
   second fact. This is vault.md §14's "Existing Memory Update".
+- A person statement that changes an earlier one ("mudou a viagem pra
+  novembro") is the same rule: update the existing fact in place —
+  the newer statement is the current truth. Two versions of one plan
+  resurface later as contradictory noise.
 
 ## Post
 

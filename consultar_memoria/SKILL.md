@@ -1,6 +1,6 @@
 ---
 name: consultar_memoria
-description: Use when the owner asks an open question that should draw on what they've saved — an itinerary from saved places, a recipe from the pantry, gift ideas, a recap of what was saved recently — rather than a fresh answer from scratch.
+description: Use when the owner asks an open question that should draw on what they've saved — an itinerary from saved places, a recipe from the pantry, gift ideas, a recap of what was saved recently, what you know about a person — rather than a fresh answer from scratch.
 ---
 
 # Consultar memória
@@ -18,10 +18,12 @@ question, then synthesize.
   Y" or "what connects these saved things".
 - **One clear central entity** (a person, a single place, a single
   topic) → `fact_store(action="probe", entity="...")` — everything
-  saved about it. A question about the *connection* ("o que o Pedro
-  me recomendou?") is still this shape: probe who/what it names —
-  facts tagged `relacao:*` state the connection, and the direction
-  comes from each fact's own content, not co-occurrence.
+  saved about it. A person summary ("o que eu sei sobre a Ana?")
+  asks for `limit=25` — the default 10 truncates months of events.
+  A question about the *connection* ("o que o Pedro me recomendou?")
+  is still this shape: probe who/what it names — facts tagged
+  `relacao:*` state the connection, and the direction comes from
+  each fact's own content, not co-occurrence.
 - **A self-reflective question about patterns across everything
   saved** ("o que eu aparentemente gosto?", "o que isso diz sobre
   mim?", "analisa o que eu salvei", "faça um resumo do que eu tenho
@@ -35,6 +37,15 @@ question, then synthesize.
 If the question involves the owner's own pantry or people they know,
 read `USER.md` (the `memory` tool) first — that's where that lives,
 not in `fact_store` (see `runtime/SOUL.md`, "Two kinds of memory").
+
+## If the probe comes back thin
+
+Widen one step at a time, one call per step, stop as soon as the
+answer's shape is there: `related(entity)` first (facts connected to
+the entity through shared context — its neighborhood in the graph),
+`search` as the last resort. And every result already carries
+`created_at`/`updated_at` — a "quando comecei a falar sobre a Ana?"
+reads the dates off results you already have, no second call.
 
 ## Filter
 
@@ -57,7 +68,10 @@ Synthesize a real answer from the facts you got back — an itinerary,
 a recipe match, a gift list, a recap — not a raw list of what was
 retrieved. Cite what you actually used. A cited fact carrying
 `relacao:*` gets its connection named ("o João te recomendou o
-restaurante X", not just "o restaurante X").
+restaurante X", not just "o restaurante X"). For a person question,
+the answer is the union of both memories — who this person is to the
+owner (`USER.md`) plus what's been saved about them, told in date
+order. A person page, not a fact dump.
 
 **For the self-reflective question**, the answer is different in
 kind: count how often each tag/theme actually appears across what came

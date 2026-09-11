@@ -74,6 +74,10 @@ def test_soul_keeps_person_carrying_content_in_the_fact_store():
     assert "content carrying a person, relation tagged" in soul()
 
 
+def test_soul_routes_durable_person_facts_to_memory():
+    assert '"a Ana é minha colega de trabalho" → memory only, never fact_store' in soul()
+
+
 def test_soul_requires_real_actions_to_be_auditable():
     assert (
         "must be identifiable afterward through `hermes sessions export`"
