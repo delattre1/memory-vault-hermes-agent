@@ -13,8 +13,28 @@
 # still reset to anthropic/claude-sonnet-5 under provider: plow every boot,
 # with `docker exec ... printenv` showing neither variable in the container's
 # actual environment at all.
+#
+# --- Why the image is built here -----------------------------------------
+# This repo now carries its own Dockerfile (the fleet base plus the baked-in
+# agent-index usage reporter), so agent-mgr must build it instead of pulling
+# the fleet pin directly. agent-mgr inspects the image named by AGENT_IMAGE
+# in agent.env to pick the boot contract, so the `image:` below and that
+# descriptor line must be the same tag -- a mismatch boots one image under
+# another's derivation, silently. Same pattern as
+# the-plow-times-hermes-agent's compose.override.yml.
+#
+# The build context is ${AGENT_DIR}, never `.`: agent-mgr runs
+# `docker compose -f <this file> build` without changing directory, so a
+# relative context resolves against agent-mgr's own directory, not this
+# repo. `pull_policy: never` is required -- without it a registry image
+# could be pulled over the local build and run with the agent's
+# credentials. Build with `agent-mgr compose memory-vault build`, then
+# `agent-mgr restart`.
 services:
   hermes:
+    build: { context: "${AGENT_DIR}" }
+    image: ${AGENT_IMAGE}
+    pull_policy: never
     environment:
       - HERMES_PROVIDER=openrouter
-      - HERMES_MODEL=google/gemini-2.5-flash-lite
+      - HERMES_MODEL=meta/muse-spark-1.3-contributor

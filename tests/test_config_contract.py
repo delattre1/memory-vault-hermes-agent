@@ -4,7 +4,11 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-DESCRIPTOR_KEYS = {"AGENT_CONFIG", "AGENT_LIVE", "AGENT_DEPLOY_HOOK"}
+# AGENT_IMAGE joined the closed set once this repo started building its own
+# image (Dockerfile, agent-index reporter baked in): agent-mgr reads this tag
+# to pick the boot contract, and it must match compose.override.yml's image:
+# line, so it is repo identity like AGENT_DEPLOY_HOOK, not a personal value.
+DESCRIPTOR_KEYS = {"AGENT_CONFIG", "AGENT_LIVE", "AGENT_DEPLOY_HOOK", "AGENT_IMAGE"}
 
 
 def soul():
