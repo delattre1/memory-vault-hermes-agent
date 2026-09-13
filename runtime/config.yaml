@@ -18,9 +18,6 @@ _config_version: 39
 # a group thread into per-sender sessions, and the plow-chat plugin's
 # config.extra flag never reaches the gateway session store.
 group_sessions_per_user: false
-model:
-  default: google/gemini-2.5-flash-lite
-  provider: openrouter
 # Saved-content memory backend: the built-in holographic fact store (SQLite,
 # local, no API key -- confirmed reading the plugin source inside the image).
 # Not a service we run; the plugin ships with Hermes and activates on this
@@ -36,8 +33,7 @@ mcp_servers:
   #
   # THIS BLOCK IS THE DECLARATION. An agent that drives no Mac deletes it --
   # leaving it in place with blank DOMO_* values is a configured latch with no
-  # credential, which is a broken agent rather than an unconfigured one, and
-  # `agent-mgr check-latch` says so.
+  # credential, which is a broken agent rather than an unconfigured one.
   #
   # Baseline rather than optional because most agents want it: a new one is
   # wired for Latch and you remove this if it drives nothing.
@@ -71,6 +67,10 @@ platforms:
 # Every other entry here is the image's own default set, copied so this
 # stays an allowlist-minus-two rather than a hand-maintained one that could
 # silently drift from the image's actual defaults.
+#
+# Provider/model are not pinned here or in compose.yml: plow-init writes the
+# Plow-hosted default when HERMES_PROVIDER / HERMES_MODEL are unset, which is
+# the evaluation contract (same omission as life-assistant / The Plow Times).
 platform_toolsets:
   cli:
     - clarify

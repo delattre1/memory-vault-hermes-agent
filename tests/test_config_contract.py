@@ -4,10 +4,8 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-# AGENT_IMAGE joined the closed set once this repo started building its own
-# image (Dockerfile, agent-index reporter baked in): agent-mgr reads this tag
-# to pick the boot contract, and it must match compose.override.yml's image:
-# line, so it is repo identity like AGENT_DEPLOY_HOOK, not a personal value.
+# AGENT_IMAGE remains for leftover agent-mgr inspect. The live boot path is
+# compose.yml; plow-agents does not read this file for the image tag.
 DESCRIPTOR_KEYS = {"AGENT_CONFIG", "AGENT_LIVE", "AGENT_DEPLOY_HOOK", "AGENT_IMAGE"}
 
 
@@ -122,7 +120,7 @@ def test_no_credential_file_is_tracked():
 
 
 def test_saved_content_memory_provider_is_active():
-    config = yaml.safe_load((ROOT / "config.yaml").read_text())
+    config = yaml.safe_load((ROOT / "runtime" / "config.yaml").read_text())
     assert config["memory"]["provider"] == "holographic"
 
 

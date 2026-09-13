@@ -2,7 +2,6 @@
 # the reviewed record and stay tracked.
 docs/superpowers/plans/
 .env
-agent.env
 __pycache__/
 .pytest_cache/
 .DS_Store

@@ -10,9 +10,7 @@ thing worth knowing about a boot service.
 
 Ported from life-assistant-hermes-agent's tests/test_agent_index_service.py --
 same reporter, same run script, only the AGENT_ID used in the parametrized
-cases differs (memory-vault, this repo's registered agent id) and this
-repo's own compose.override.yml (it already existed for other reasons, see
-test_no_bespoke_s6_layout_outside_the_image_tree below).
+cases differs (memory-vault, this repo's registered agent id).
 """
 import os
 import subprocess
@@ -131,15 +129,12 @@ def test_the_client_is_pinned_and_the_build_verifies_it():
 def test_no_bespoke_s6_layout_outside_the_image_tree():
     """A bind mount whose source is missing does not fail: the runtime creates a
     DIRECTORY at the target and the reporter starts against it, reporting
-    nothing. The image carries the client instead.
-
-    Unlike life-assistant-hermes-agent, this repo does keep a
-    compose.override.yml (it carries the HERMES_PROVIDER/HERMES_MODEL
-    overrides plow-init needs, and now the build/image/pull_policy that
-    makes agent-mgr build this repo's own image) -- only the s6 layout
-    itself must not exist as a second, competing copy outside image/.
+    nothing. The image carries the client instead. compose.yml is the runtime
+    surface; compose.override.yml must not exist beside it.
     """
     assert not (ROOT / "docker/s6-rc.d").exists()
+    assert (ROOT / "compose.yml").is_file()
+    assert not (ROOT / "compose.override.yml").exists()
 
 
 def invocations(tmp_path) -> list[str]:

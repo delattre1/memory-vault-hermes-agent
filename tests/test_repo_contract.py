@@ -43,21 +43,50 @@ def test_deploy_hook_publishes_soul_md_every_deploy():
     assert "published SOUL.md" in text
 
 
-def test_compose_override_carries_no_skill_mounts():
-    # Skills ride the deploy-hook seed into the agent's home, not :ro
-    # mounts -- a :ro mount makes the agent's own skill edits die with
-    # EROFS. The file itself is legitimate for other things a container
-    # needs (HERMES_PROVIDER/HERMES_MODEL, read by plow-init from the real
-    # process environment, never from the home .env) -- only a `volumes:`
-    # section reintroducing the old mount-based skill delivery is the
-    # regression this guards against.
-    override = ROOT / "compose.override.yml"
-    if not override.is_file():
-        return
-    assert "volumes:" not in override.read_text(), (
-        "compose.override.yml declares volumes: -- skills are seeded by "
-        "the deploy-hook now, not mounted read-only"
-    )
+def test_compose_yml_is_the_plow_agents_surface():
+    # plow-agents' compose.example.yml: service `agent`, credential drop-in,
+    # named home volume. compose.override.yml must not exist: Compose loads
+    # that filename automatically and would start a second gateway.
+    import re
+
+    assert not (ROOT / "compose.override.yml").exists()
+    text = (ROOT / "compose.yml").read_text()
+    assert re.search(r"^  agent:", text, re.M)
+    assert "build: ." in text
+    assert "./plow-credentials:/var/lib/plow/credentials.host:ro" in text
+    assert "agent-home:/var/lib/hermes" in text
+    assert "AGENT_ID: memory-vault" in text
+    assert "stop_grace_period: 35s" in text
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("-") and "skills" in stripped and "agent-home" not in stripped:
+            raise AssertionError(f"skill mount in compose.yml: {stripped}")
+
+
+def test_compose_yml_does_not_pin_a_model():
+    text = (ROOT / "compose.yml").read_text()
+    assert "HERMES_PROVIDER" not in text
+    assert "HERMES_MODEL" not in text
+
+
+def test_dockerfile_copies_every_mv_skill_outside_the_home():
+    import re
+
+    dockerfile = (ROOT / "Dockerfile").read_text()
+    skills = sorted(p.parent.name for p in ROOT.glob("mv-*/SKILL.md"))
+    missing = [name for name in skills if f"COPY {name}/" not in dockerfile]
+    assert missing == [], f"in the tree but never copied into the image: {', '.join(missing)}"
+    for name in skills:
+        assert re.search(
+            rf"^COPY\s+{re.escape(name)}/\s+/opt/hermes/skills/{re.escape(name)}/\s*$",
+            dockerfile,
+            re.MULTILINE,
+        ), f"COPY {name}/ does not land at /opt/hermes/skills/{name}/"
+        assert f"/var/lib/hermes/skills/{name}" not in dockerfile
+    assert "COPY runtime/SOUL.md /var/lib/hermes/SOUL.md" in dockerfile
+    assert "COPY runtime/config.yaml /var/lib/hermes/config.yaml" in dockerfile
+    assert "plow-credentials" in (ROOT / ".dockerignore").read_text()
+    assert "plow-credentials" in (ROOT / ".gitignore").read_text()
 
 
 def test_no_meal_planning_leftovers_remain():
@@ -86,11 +115,12 @@ def test_descriptor_is_documented_in_env_example():
     assert "PLOW_HOME_CHANNEL=" in example
 
 
-def test_readme_points_at_the_real_spec():
+def test_readme_is_the_product():
     readme = (ROOT / "README.md").read_text()
-    assert "2026-09-03-jessie-content-memory-pivot-design.md" in readme
-    spec = ROOT / "docs/superpowers/specs/2026-09-03-jessie-content-memory-pivot-design.md"
-    assert spec.is_file(), "README links a spec that does not exist"
+    assert "Memory Vault" in readme
+    assert "Share the link like a text to a friend" in readme
+    assert "plow-agents" not in readme
+    assert "docker compose" not in readme
 
 
 def test_skills_tsv_declares_no_connectors():
