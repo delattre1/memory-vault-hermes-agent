@@ -119,8 +119,10 @@ def test_readme_is_the_product():
     readme = (ROOT / "README.md").read_text()
     assert "Memory Vault" in readme
     assert "Share the link like a text to a friend" in readme
-    assert "plow-agents" not in readme
-    assert "docker compose" not in readme
+    assert "## Install" in readme
+    assert "plow-agents mint ln_xxx" in readme
+    assert "docker compose up --build -d" in readme
+    assert "https://your-tutorial-url" not in readme
 
 
 def test_skills_tsv_declares_no_connectors():
