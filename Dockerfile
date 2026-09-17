@@ -5,7 +5,7 @@
 # sibling agents' Dockerfiles: a mutable tag would re-resolve on every pull
 # and change a large unreviewed surface under a running agent that holds live
 # credentials.
-FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents@sha256:bfd4980f361a551e62569f8c2eb717c1076d0b8be3a0499b869eaece151336a4
+FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-51f83158a70a383f03a4d03dbd8b6ea102cf0361@sha256:253d7ed3409effa7fa59113d93b4b79bb731d8264cdaf4cd60294924d0110a2e
 
 # Identity and skills. SOUL.md replaces the base's; first boot re-asserts
 # root ownership, which is what the trailing chmod answers. Skills land at
