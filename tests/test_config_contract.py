@@ -124,6 +124,14 @@ def test_saved_content_memory_provider_is_active():
     assert config["memory"]["provider"] == "holographic"
 
 
+def test_platform_toolsets_drop_web_and_browser():
+    config = yaml.safe_load((ROOT / "runtime" / "config.yaml").read_text())
+    for name, tools in config["platform_toolsets"].items():
+        lowered = {str(item).strip().lower() for item in tools}
+        for banned in ("web", "browser", "search"):
+            assert banned not in lowered, f"{name} still lists {banned}"
+
+
 
 def test_soul_replies_in_the_language_the_owner_writes_in():
     text = soul()

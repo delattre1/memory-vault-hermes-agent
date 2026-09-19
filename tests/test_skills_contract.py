@@ -4,7 +4,7 @@ import pytest
 
 # A skill is any top-level folder with a SKILL.md -- no shared name prefix
 # (the fm-* convention was specific to the meal-planning domain this
-# project pivoted away from; see docs/roadmap.md).
+# project pivoted away from).
 ROOT = Path(__file__).resolve().parent.parent
 SKILL_DIRS = sorted(
     p.name
@@ -32,9 +32,9 @@ def test_every_skill_md_description_says_when_to_use_it(skill):
     assert "Use when" in frontmatter
 
 
-# The closed relation vocabulary of the memory graph (docs/plow-memory-vault.md
-# §7/§8/§14): every relation the vault names, as a relacao:* tag. The ingest
-# skill defines them; the consult and learn skills must handle them.
+# The closed relation vocabulary of the memory graph: every relation the
+# vault names, as a relacao:* tag. The ingest skill defines them; the
+# consult and learn skills must handle them.
 RELATION_TAGS = (
     "relacao:recomendou",
     "relacao:localizado_em",
@@ -53,10 +53,12 @@ def test_ingest_skill_defines_the_relation_vocabulary():
         assert tag in text, f"mv-ingest does not define {tag}"
 
 
-def test_ingest_skill_routes_bare_person_statements():
+def test_ingest_skill_routes_profile_away_from_fact_store():
     text = (ROOT / "mv-ingest" / "SKILL.md").read_text()
-    assert "bare statement about their own life" in text
-    assert "a person in it" in text
+    assert "Durable facts about the owner" in text
+    assert "never fact_store" in text
+    assert "Which store" in text
+    assert "`memory` tool to `USER.md`" in text
 
 
 def test_ingest_skill_updates_a_changed_person_plan_in_place():
@@ -86,7 +88,7 @@ def test_consult_skill_answers_temporal_recaps_chronologically():
 
 def test_ingest_skill_resurfaces_only_when_it_earns_it():
     text = (ROOT / "mv-ingest" / "SKILL.md").read_text()
-    assert "Silence is the default; a resurface is the\nexception." in text
+    assert "Silence is the default; a resurface is\nthe exception." in text
     assert "≥14 days" in text
     assert "≥7 days" in text
     assert "never claim\n    anything was or wasn't done about it" in text
@@ -96,6 +98,7 @@ def test_ingest_skill_resurfaces_only_when_it_earns_it():
 def test_consult_skill_resurfaces_from_cited_facts_only():
     text = (ROOT / "mv-recall" / "SKILL.md").read_text()
     assert "Below threshold,\nsilence." in text
+    assert "`skill_view(name=\"mv-act\")`" in text
     assert "on a turn that\nhands off to `mv-act`" in text
     assert "on a temporal recap" in text
     assert "already surfaced the same connection" in text
@@ -104,10 +107,16 @@ def test_consult_skill_resurfaces_from_cited_facts_only():
 
 def test_consult_skill_widens_a_thin_probe_before_search():
     text = (ROOT / "mv-recall" / "SKILL.md").read_text()
-    assert "`related(entity)`" in text
+    assert '`fact_store(action="related"' in text
     assert "`limit=25`" in text
 
 
 def test_learn_skill_preserves_relation_tags_on_update():
     text = (ROOT / "mv-learn" / "SKILL.md").read_text()
     assert "including the `relacao:*` tags" in text
+
+
+def test_act_skill_does_not_default_to_run_command():
+    text = (ROOT / "mv-act" / "SKILL.md").read_text()
+    assert "Always the `mcp__latch` tools" not in text
+    assert "Do not reach for\n  `plow_run_command`" in text

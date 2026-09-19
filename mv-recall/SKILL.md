@@ -44,25 +44,24 @@ question, then synthesize.
 
 If the question involves the owner's own pantry or people they know,
 read `USER.md` (the `memory` tool) first — that's where that lives,
-not in `fact_store` (see `runtime/SOUL.md`, "Two kinds of memory").
+not in `fact_store` (see SOUL.md, "Two kinds of memory").
 
 ## If the probe comes back thin
 
 Widen one step at a time, one call per step, stop as soon as the
-answer's shape is there: `related(entity)` first (facts connected to
-the entity through shared context — its neighborhood in the graph),
-`search` as the last resort. And every result already carries
+answer's shape is there: `fact_store(action="related", entity="...")`
+first (facts connected to the entity through shared context — its
+neighborhood in the graph), `fact_store(action="search", ...)` as the
+last resort. And every result already carries
 `created_at`/`updated_at` — a "quando comecei a falar sobre a Ana?"
 reads the dates off results you already have, no second call.
 
 ## Filter
 
-Drop any result with empty `tags`. Every fact `mv-ingest` ever
-writes has tags — an untagged fact is leftover owner-profile data that
-leaked into `fact_store` by mistake (a known gap: it belongs in
-`memory`/`USER.md` and sometimes ends up written to both), not real
-saved content, and must never be cited or shown to the owner as
-something they saved.
+Drop any result with empty `tags`. Every fact `mv-ingest` writes to
+`fact_store` has tags — an untagged fact is leftover owner-profile data
+that leaked into `fact_store` (that belongs in `memory`/`USER.md` only)
+and must never be cited or shown to the owner as something they saved.
 
 Otherwise, use what `fact_store` returned as-is, within the `limit`
 you asked for — no ranking script of our own on top of it. (The
@@ -114,8 +113,9 @@ mentioned. Facts cited this way are individually cited, so they get
 `fact_feedback` as usual.
 
 If any fact you cited carries an `acao:*` tag other than
-`acao:nenhuma`, say so and hand off to `mv-act` instead of
-just describing the action.
+`acao:nenhuma`, say so and load `mv-act` with
+`skill_view(name="mv-act")` — never call `mv-act` as if it were a
+tool — instead of just describing the action.
 
 After answering, call `fact_feedback(action="helpful", fact_id=...)`
 on every fact you actually cited — that's what trains `fact_store` for

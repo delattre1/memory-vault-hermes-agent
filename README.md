@@ -31,11 +31,11 @@ If you have no assistant line yet: `plow-agents login --new-line`, then `lines` 
 
 Text the line you minted. Share a post the way you'd send it to a friend.
 
-To open the post in your own browser, run [Latch](https://howto.plow.co/latch) on the Mac this agent should drive. In Latch: **Agents → can’t use OAuth? create a static credential**. Put `DOMO_DEVICE_UID` and `DOMO_MCP_TOKEN` in the container’s `/var/lib/hermes/.env` (`KEY=value` at column 0), then `docker compose restart`. Chat works without Latch; fetching the live page does not.
+To open the post in your own browser, run [Latch](https://howto.plow.co/latch) on the Mac this agent should drive. In Latch: **Agents → can’t use OAuth? create a static credential**. Put `DOMO_DEVICE_UID` and `DOMO_MCP_TOKEN` in the **volume** dotenv at `/var/lib/hermes/.env` inside the container (`KEY=value` at column 0) — not the repo `.env`, which compose does not mount — then `docker compose restart`. Chat works without Latch; fetching the live page does not.
 
 ```sh
 docker compose down          # stop, keep memory
-docker compose down -v       # wipe local memory (new setup)
+docker compose down -v       # DELETES sessions and memory_store.db — only a new setup
 plow-agents revoke           # retire the line in plow-credentials
 ```
 
