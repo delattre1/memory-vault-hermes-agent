@@ -84,7 +84,10 @@ def test_dockerfile_copies_every_mv_skill_outside_the_home():
         ), f"COPY {name}/ does not land at /opt/hermes/skills/{name}/"
         assert f"/var/lib/hermes/skills/{name}" not in dockerfile
     assert "COPY runtime/SOUL.md /var/lib/hermes/SOUL.md" in dockerfile
+    assert "COPY runtime/SOUL.md /opt/hermes/plow-seed/SOUL.md" in dockerfile
     assert "COPY runtime/config.yaml /var/lib/hermes/config.yaml" in dockerfile
+    assert "merge_mv_seed_config.py" in dockerfile
+    assert "02-copy-plow-credentials" in dockerfile
     assert "plow-credentials" in (ROOT / ".dockerignore").read_text()
     assert "plow-credentials" in (ROOT / ".gitignore").read_text()
 
@@ -122,6 +125,8 @@ def test_readme_is_the_product():
     assert "## Install" in readme
     assert "plow-agents mint ln_xxx" in readme
     assert "docker compose up --build -d" in readme
+    assert "DELETES sessions and memory_store.db" in readme
+    assert "not the repo `.env`" in readme
     assert "https://your-tutorial-url" not in readme
 
 

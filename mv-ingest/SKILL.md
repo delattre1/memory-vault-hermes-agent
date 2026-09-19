@@ -1,6 +1,6 @@
 ---
 name: mv-ingest
-description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a bare statement about their own life, a person in it (a recommendation, a plan, who they were with) or something that happened (a dinner, a fight, a day) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/statement defaults to "remember this", the same as if they'd said so) — and wants it saved for later, not answered right now.
+description: Use when the owner sends a screenshot, a link, or a plain description of a place/recipe/product/gift idea — or a recommendation, a plan, who they were with, or something that happened (a dinner, a fight, a day) — whether they say "save this" explicitly or just send it bare with no other comment (a bare link/screenshot/event defaults to "remember this", the same as if they'd said so). Durable facts about the owner (a name, a relationship, the pantry, a standing preference) are not this skill — those go to memory/USER.md, never fact_store.
 ---
 
 # Ingerir conteúdo
@@ -8,6 +8,16 @@ description: Use when the owner sends a screenshot, a link, or a plain descripti
 The owner sends what they'd otherwise save on a social app. There are
 three input shapes, converging on the same Filter/Post below —
 extraction doesn't need to know which one it was:
+
+## Which store
+
+The same test as SOUL.md. Saved content (a place, recipe, product, gift
+idea, recommendation, plan, something that happened) continues below
+into `fact_store`. A durable fact *about the owner or someone in their
+life* (a name, a relationship, a pantry list, a preference) is written
+with the `memory` tool to `USER.md` only — never `fact_store`, never
+both — and this skill stops after confirming that profile write. "guarda
+isso" / "lembra disso" does not override that split.
 
 ## Gather
 
@@ -132,9 +142,7 @@ and that is not a second thing to save.
 A saved thing often names a connection — who recommended it, where it
 is, who the owner was with. The quotes in `content` connect the
 endpoints as entities; the *name* of the connection goes in `tags` as
-one `relacao:<verbo>` per relation, from this closed vocabulary only
-(every relation `docs/plow-memory-vault.md` §7/§8/§14 names, no
-others):
+one `relacao:<verbo>` per relation, from this closed vocabulary only:
 
 | Tag | Reads as | Example source |
 |---|---|---|
@@ -157,7 +165,7 @@ others):
 - Relation arriving after the first save → `fact_store
   action="update"` on the existing fact (merge the new tag and
   endpoint in — `update` rewrites passed fields wholesale), never a
-  second fact. This is vault.md §14's "Existing Memory Update".
+  second fact. An existing-memory update rewrites passed fields wholesale.
 - A person statement that changes an earlier one ("mudou a viagem pra
   novembro") is the same rule: update the existing fact in place —
   the newer statement is the current truth. Two versions of one plan
@@ -165,11 +173,10 @@ others):
 
 ## Post
 
-Call `fact_store` with `action=add`. Two things matter for how you
-write `content`, both load-bearing (see
-`docs/superpowers/specs/2026-09-03-jessie-content-memory-pivot-design.md`,
-§6.1 — `fact_store`'s own entity linking is a simple regex over
-capitalized phrases and quoted terms, not real NLP):
+Call `fact_store` with `action=add` — only after Which store chose
+content, not profile. Two things matter for how you write `content`,
+both load-bearing (`fact_store`'s own entity linking is a simple regex
+over capitalized phrases and quoted terms, not real NLP):
 
 - Put every entity from your extraction in double quotes inside the
   sentence, even if it's also capitalized (e.g. `"Santorini"`,
@@ -209,10 +216,9 @@ is what lets them correct you immediately if the extraction is wrong.
 
 ## Resurface — only when it earns it
 
-One chance per save to be the wow moment the vault describes
-(`docs/plow-memory-vault.md` §10): a connection between what just
-landed and something old. Silence is the default; a resurface is the
-exception.
+One chance per save to be the wow moment: a connection between what
+just landed and something old. Silence is the default; a resurface is
+the exception.
 
 - **Use what the turn already fetched.** The duplicate-check search
   above is already the sample of older memories about this entity,
@@ -230,9 +236,8 @@ exception.
     `acao:nenhuma`) whose `created_at` is ≥7 days old: "há 23 dias
     você salvou o X querendo reservar". State the fact; never claim
     anything was or wasn't done about it.
-- **Shape**: one line, after the confirmation, 🧠-marked (the vault's
-  §10 marker), an observation with an optional offer — "quer que eu
-  reúna?" — never an order, never more than one. Name the span you
+- **Shape**: one line, after the confirmation, 🧠-marked, an
+  observation with an optional offer — "quer que eu reúna?" — never an order, never more than one. Name the span you
   read off `created_at` ("47 dias atrás").
 - **Skip it** when no threshold is met, when this session already
   surfaced the same connection, or when nothing was saved this turn

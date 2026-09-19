@@ -21,23 +21,23 @@ correctly.
 ## Filter
 
 Map the tag to the narrowest Latch capability for *this one step*,
-never a batch of steps in one call. **Always the `mcp__latch` tools
-(`plow_browser_open`/`plow_browser`/`plow_write_file`/`plow_run_command`)
-— never a generic/local tool that happens to also open a browser or
-fetch a page** (`browser_exec`, `web_search`, `web_extract`, `terminal`
-+ `curl`, and so on). Those aren't Latch: they don't run on the
-owner's Mac, don't go through Latch's approval gate, and one of them
-(`browser_exec`) needs a local Chrome this container doesn't have — if
-`plow_browser_open` itself fails, that's Latch reporting a real error
-you relay to the owner, not a cue to switch tools.
+never a batch of steps in one call. **Always Latch MCP tools — never a
+generic/local tool that happens to also open a browser or fetch a page**
+(`browser_exec`, `web_search`, `web_extract`, `terminal` + `curl`, and
+so on). Those aren't Latch: they don't run on the owner's Mac, don't go
+through Latch's approval gate, and one of them (`browser_exec`) needs a
+local Chrome this container doesn't have — if `plow_browser_open`
+itself fails, that's Latch reporting a real error you relay to the
+owner, not a cue to switch tools.
 
 - `acao:reserva` → `plow_browser_open`/`plow_browser` to find and
   submit the reservation on the relevant site.
 - `acao:compra` → `plow_browser_open`/`plow_browser` to add to cart —
   **never completes checkout**; that always stops for an explicit
   human confirmation, same rule as any purchase.
-- `acao:calendario` → `plow_write_file` or the calendar tool already
-  wired through Latch, to add the one event described.
+- `acao:calendario` → `plow_write_file` to add the one event described
+  (ICS or the calendar file Latch already exposes). Do not reach for
+  `plow_run_command` for this.
 
 ## Post
 
